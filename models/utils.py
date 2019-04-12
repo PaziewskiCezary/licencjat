@@ -41,13 +41,13 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims):
                 # masks
 
                 original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))
-                resized_mask = imresize(original_img, dims+[1])
+                resized_mask = imresize(original_mask, dims+[1])
                 array_mask = img_to_array(resized_img)/255
                 labels.append(array_mask)
 
             imgs = np.array(imgs)
             labels = np.array(labels)
-            labels = labels.reshape(-1, dims[0], dims[1], 1)
+#             labels = labels.reshape(-1, dims[0], dims[1], 1)
 
             yield imgs, labels
             
