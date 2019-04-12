@@ -40,7 +40,6 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims):
                 imgs.append(croped_img)
 
                 # masks
-                print(images[i])
                 if images[i].startswit("0"):
                     croped_mask = np.zeros((xw,yw))
                 else:
