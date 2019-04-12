@@ -11,6 +11,7 @@ import matplotlib.colors as colors
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 from matplotlib import cm
 
+import sys
 if 'ipykernel' in sys.modules:
     from tqdm import tqdm_notebook as tqdm
 else:
