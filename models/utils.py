@@ -32,19 +32,20 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims):
             labels = []
             for i in ix:
                 # images
-                original_img = load_img(data_dir + images[i])/255
-                original_img = img_to_array(original_img)
+                original_img = load_img(data_dir + images[i])
+                original_img = img_to_array(original_img)/255
                 x = random.randint(0, original_img.shape[0]-xw)
                 y = random.randint(0, original_img.shape[1]-yw)
-                croped_img = np.copy(original_img[x:x+xw, y:y+yw])
+                croped_img = np.copy(original_img[x:x+xw, y:y+yw, :])
+
                 imgs.append(croped_img)
 
                 # masks
-                if images[i].startswit("0"):
+                if images[i].startswith("0"):
                     croped_mask = np.zeros((xw,yw))
                 else:
-                    original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))/255
-                    original_mask = img_to_array(original_mask)
+                    original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))
+                    original_mask = img_to_array(original_mask)/255
                     x = random.randint(0, original_img.shape[0]-xw)
                     y = random.randint(0, original_img.shape[1]-yw)
                     croped_mask = original_mask[x:x+xw, y:y+yw]

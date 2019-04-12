@@ -97,11 +97,11 @@ def reconstruct(data, path):
 
         names = generate_names(path, i, Class)
 
-        US1 = nparray_2_PIL_image(US1)
-        US1.save(names[0].convert('RGB'))
+        US1 = nparray_2_PIL_image(normed_2_grayscale(US1))
+        US1.save(names[0])
 
-        US2 = nparray_2_PIL_image(US2)
-        US2.save(names[2].convert('RGB'))
+        US2 = nparray_2_PIL_image(normed_2_grayscale(US2))
+        US2.save(names[2])
 
         mask1 = nparray_2_PIL_image(mask1*255)
         mask1.save(names[1])
