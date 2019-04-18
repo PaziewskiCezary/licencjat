@@ -21,7 +21,11 @@ def dice_coef(y_true, y_pred):
 
     isct = tf.reduce_sum(y_true * y_pred)
 
-    return 1 - 2 * isct / (tf.reduce_sum(y_true) + tf.reduce_sum(y_pred))
+    dice = 1 - 2 * isct / (tf.reduce_sum(y_true) + tf.reduce_sum(y_pred))
+    if (tf.reduce_sum(y_true) + tf.reduce_sum(y_pred)) == 0:
+        return 0.
+    return dice
+
 
 
 def data_gen_small(data_dir, mask_dir, images, batch_size, dims):
@@ -42,15 +46,15 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims):
 
                 original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))
                 resized_mask = imresize(original_mask, dims+[3])
-                array_mask = img_to_array(resized_img)/255
+                array_mask = img_to_array(resized_mask)/255
                 labels.append(array_mask[:, :, 0])
 
             imgs = np.array(imgs)
             labels = np.array(labels)
-#             labels = labels.reshape(-1, dims[0], dims[1], 1)
+            labels = labels.reshape(-1, dims[0], dims[1], 1)
 
             yield imgs, labels
-            
+
 
 def data_gen_small_croped(data_dir, mask_dir, images, batch_size, dims):
         while True:
