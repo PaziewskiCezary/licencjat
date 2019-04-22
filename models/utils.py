@@ -45,7 +45,9 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims, augment={}):
                     resized_img = np.flip(resized_img, 1)
                 if H_AUGMENT:
                     resized_img = np.flip(resized_img, 0)
-                imgs.append(resized_img[:, :, 0])
+                resized_img = resized_img[:, :, 0]
+                resized_img = resized_mask.reshape(*resized_img.shape, 1)
+                imgs.append(resized_img)
 
                 # mask
                 original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))
@@ -66,39 +68,39 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims, augment={}):
             yield imgs, labels
 
 
-def data_gen_small_croped(data_dir, mask_dir, images, batch_size, dims):
-        while True:
-            ix = np.random.choice(np.arange(len(images)), batch_size)
-            xw, yw = dims[0], dims[1]
-            imgs = []
-            labels = []
+# def data_gen_small_croped(data_dir, mask_dir, images, batch_size, dims):
+#         while True:
+#             ix = np.random.choice(np.arange(len(images)), batch_size)
+#             xw, yw = dims[0], dims[1]
+#             imgs = []
+#             labels = []
 
-            for i in ix:
-                # images
-                original_img = load_img(data_dir + images[i])
-                original_img = img_to_array(original_img)/255
-                x = random.randint(0, original_img.shape[0]-xw)
-                y = random.randint(0, original_img.shape[1]-yw)
-                croped_img = np.copy(original_img[x:x+xw, y:y+yw, :])
+#             for i in ix:
+#                 # images
+#                 original_img = load_img(data_dir + images[i])
+#                 original_img = img_to_array(original_img)/255
+#                 x = random.randint(0, original_img.shape[0]-xw)
+#                 y = random.randint(0, original_img.shape[1]-yw)
+#                 croped_img = np.copy(original_img[x:x+xw, y:y+yw, :])
 
-                imgs.append(croped_img)
+#                 imgs.append(croped_img)
 
-                # masks
-                if images[i].startswith("0"):
-                    croped_mask = np.zeros((xw,yw))
-                else:
-                    original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))
-                    original_mask = img_to_array(original_mask)/255
-                    x = random.randint(0, original_mask.shape[0]-xw)
-                    y = random.randint(0, original_mask.shape[1]-yw)
-                    croped_mask = original_mask[x:x+xw, y:y+yw, 0]
+#                 # masks
+#                 if images[i].startswith("0"):
+#                     croped_mask = np.zeros((xw,yw))
+#                 else:
+#                     original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))
+#                     original_mask = img_to_array(original_mask)/255
+#                     x = random.randint(0, original_mask.shape[0]-xw)
+#                     y = random.randint(0, original_mask.shape[1]-yw)
+#                     croped_mask = original_mask[x:x+xw, y:y+yw, 0]
 
-                labels.append(croped_mask)
+#                 labels.append(croped_mask)
 
 
 
-            imgs = np.array(imgs)
-            labels = np.array(labels)
-            labels = labels.reshape(-1, dims[0], dims[1], 1)
+#             imgs = np.array(imgs)
+#             labels = np.array(labels)
+#             labels = labels.reshape(-1, dims[0], dims[1], 1)
 
-            yield imgs, labels
+#             yield imgs, labels
