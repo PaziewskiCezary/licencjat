@@ -1,4 +1,4 @@
 wget
 keras
 tensorflow
-sklearn
+livelossplot
