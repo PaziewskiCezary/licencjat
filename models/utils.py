@@ -35,11 +35,10 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims, augment={}):
             labels = []
             for i in ix:
 
-                if augment:
-                    if 'v' in augment:
-                        V_AUGMENT = True if augment['v'] <= np.random.random() else False
-                    if 'h' in augment:
-                        H_AUGMENT = True if augment['h'] <= np.random.random() else False
+                if 'v' in augment:
+                    V_AUGMENT = True if augment['v'] <= np.random.random() else False
+                if 'h' in augment:
+                    H_AUGMENT = True if augment['h'] <= np.random.random() else False
 
                 # images
                 original_img = load_img(data_dir + images[i])
