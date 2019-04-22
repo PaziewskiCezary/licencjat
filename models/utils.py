@@ -37,21 +37,20 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims, augment={}):
                 V_AUGMENT = True if 1 - augment.get('v', 0) <= np.random.random() else False
                 H_AUGMENT = True if 1 - augment.get('h', 0) <= np.random.random() else False
 
-                # images
+                # image
                 original_img = load_img(data_dir + images[i])
-                array_img = img_to_array(original_img)/255
-                resized_img = imresize(array_img, dims+[3])[:,:,0]
-                resized_img = resized_img.reshape(*resized_img.shape, 1)
+                resized_img = imresize(original_img, dims+[1])
+                resized_img = img_to_array(resized_img)/255
                 if V_AUGMENT:
                     resized_img = np.flip(resized_img, 1)
                 if H_AUGMENT:
                     resized_img = np.flip(resized_img, 0)
                 imgs.append(resized_img)
 
-                # masks
+                # mask
                 original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))
-                array_mask = img_to_array(original_mask)/255
-                resized_mask = imresize(array_mask, dims+[1])
+                resized_mask = imresize(original_mask, dims+[1])
+                resized_mask = img_to_array(resized_mask)/255
 
                 if V_AUGMENT:
                     resized_mask = np.flip(resized_mask, 1)
