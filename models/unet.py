@@ -70,7 +70,7 @@ def up(input_layer, residual, filters):
 def get_unet_model(filters=64):
 
     # Make a custom U-nets implementation.
-    input_layer = Input(shape = [128, 128, 3])
+    input_layer = Input(shape = [128, 128, 1])
     layers = [input_layer]
     residuals = []
 

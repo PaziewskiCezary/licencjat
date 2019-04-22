@@ -34,16 +34,14 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims, augment={}):
             imgs = []
             labels = []
             for i in ix:
-
-                if 'v' in augment:
-                    V_AUGMENT = True if augment['v'] <= np.random.random() else False
-                if 'h' in augment:
-                    H_AUGMENT = True if augment['h'] <= np.random.random() else False
+                V_AUGMENT = True if 1 - augment.get('v', 0) <= np.random.random() else False
+                H_AUGMENT = True if 1 - augment.get('h', 0) <= np.random.random() else False
 
                 # images
                 original_img = load_img(data_dir + images[i])
                 array_img = img_to_array(original_img)/255
-                resized_img = imresize(array_img, dims+[3])
+                resized_img = imresize(array_img, dims+[3])[:,:,0]
+                resized_img = resized_img.reshape(*resized_img.shape, 1)
                 if V_AUGMENT:
                     resized_img = np.flip(resized_img, 1)
                 if H_AUGMENT:
@@ -51,10 +49,9 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims, augment={}):
                 imgs.append(resized_img)
 
                 # masks
-
                 original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))
                 array_mask = img_to_array(original_mask)/255
-                resized_mask = imresize(array_mask, dims+[3])
+                resized_mask = imresize(array_mask, dims+[1])
 
                 if V_AUGMENT:
                     resized_mask = np.flip(resized_mask, 1)
