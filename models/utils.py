@@ -45,7 +45,7 @@ def data_gen_small(data_dir, mask_dir, images, batch_size, dims, augment={}):
                     resized_img = np.flip(resized_img, 1)
                 if H_AUGMENT:
                     resized_img = np.flip(resized_img, 0)
-                imgs.append(resized_img)
+                imgs.append(resized_img[:, :, 0])
 
                 # mask
                 original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))
