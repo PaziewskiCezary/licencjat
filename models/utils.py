@@ -28,26 +28,41 @@ def dice_coef(y_true, y_pred):
 
 
 
-def data_gen_small(data_dir, mask_dir, images, batch_size, dims):
+def data_gen_small(data_dir, mask_dir, images, batch_size, dims, augment={}):
         while True:
             ix = np.random.choice(np.arange(len(images)), batch_size)
-            xw, yw = dims[0], dims[1]
             imgs = []
             labels = []
             for i in ix:
+
+                if augment:
+                    if 'v' in augment:
+                        V_AUGMENT = True if augment['v'] <= np.random.random() else False
+                    if 'h' in augment:
+                        H_AUGMENT = True if augment['h'] <= np.random.random() else False
+
                 # images
                 original_img = load_img(data_dir + images[i])
-                resized_img = imresize(original_img, dims+[3])
-                array_img = img_to_array(resized_img)/255
-
-                imgs.append(array_img)
+                array_img = img_to_array(original_img)/255
+                resized_img = imresize(array_img, dims+[3])
+                if V_AUGMENT:
+                    resized_img = np.flip(resized_img, 1)
+                if H_AUGMENT:
+                    resized_img = np.flip(resized_img, 0)
+                imgs.append(resized_img)
 
                 # masks
 
                 original_mask = load_img(mask_dir + images[i].replace('full', 'mask'))
-                resized_mask = imresize(original_mask, dims+[3])
-                array_mask = img_to_array(resized_mask)/255
-                labels.append(array_mask[:, :, 0])
+                array_mask = img_to_array(original_mask)/255
+                resized_mask = imresize(array_mask, dims+[3])
+
+                if V_AUGMENT:
+                    resized_mask = np.flip(resized_mask, 1)
+                if H_AUGMENT:
+                    resized_mask = np.flip(resized_mask, 0)
+
+                labels.append(resized_mask[:, :, 0])
 
             imgs = np.array(imgs)
             labels = np.array(labels)
@@ -62,6 +77,7 @@ def data_gen_small_croped(data_dir, mask_dir, images, batch_size, dims):
             xw, yw = dims[0], dims[1]
             imgs = []
             labels = []
+
             for i in ix:
                 # images
                 original_img = load_img(data_dir + images[i])
@@ -81,7 +97,10 @@ def data_gen_small_croped(data_dir, mask_dir, images, batch_size, dims):
                     x = random.randint(0, original_mask.shape[0]-xw)
                     y = random.randint(0, original_mask.shape[1]-yw)
                     croped_mask = original_mask[x:x+xw, y:y+yw, 0]
+
                 labels.append(croped_mask)
+
+
 
             imgs = np.array(imgs)
             labels = np.array(labels)
