@@ -70,10 +70,15 @@ def up(input_layer, residual, filters):
 def get_unet_model(filters=64):
 
     # Make a custom U-nets implementation.
-    input_layer = Input(shape = [128, 468, 1])
+    input_layer = Input(shape = [256, 256, 1])
     layers = [input_layer]
     residuals = []
 
+    # Down 0, 256
+    d0, res0 = down(input_layer, filters)
+    residuals.append(res0)
+    filters *= 2
+    
     # Down 1, 128
     d1, res1 = down(input_layer, filters)
     residuals.append(res1)
@@ -112,6 +117,10 @@ def get_unet_model(filters=64):
     # Up 4, 128
     up4 = up(up3, residual=residuals[-4], filters=filters/2)
     out = Conv2D(filters=1, kernel_size=(1, 1), activation="sigmoid")(up4)
+
+    # Up 4, 256
+    up5 = up(up4, residual=residuals[-5], filters=filters/2)
+    out = Conv2D(filters=1, kernel_size=(1, 1), activation="sigmoid")(up5)
 
     model = Model(input_layer, out)
     return model
