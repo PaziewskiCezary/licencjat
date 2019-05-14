@@ -118,10 +118,6 @@ def get_unet_model(filters=64):
     up4 = up(up3, residual=residuals[-4], filters=filters/2)
     out = Conv2D(filters=1, kernel_size=(1, 1), activation="sigmoid")(up4)
 
-    # Up 4, 256
-    up5 = up(up4, residual=residuals[-5], filters=filters/2)
-    out = Conv2D(filters=1, kernel_size=(1, 1), activation="sigmoid")(up5)
-
     model = Model(input_layer, out)
     return model
 
