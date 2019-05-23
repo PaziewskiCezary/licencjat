@@ -4,7 +4,6 @@ Created on Sat Jun 23 16:26:58 2018
 
 @author: manjotms10
 """
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -12,7 +11,8 @@ from keras.models import Sequential, Model
 from keras.layers import Dense, Conv2D, Input, MaxPool2D, UpSampling2D, Concatenate, Conv2DTranspose
 import tensorflow as tf
 from keras.optimizers import Adam
-from scipy.misc import imresize
+from scipy.misc.pilutil import imresize
+
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
 import os
